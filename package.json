@@ -1,27 +1,42 @@
 {
-  "author": "will@mcmahan.me",
-  "bugs": "https://github.com/thoughtbot/gulp-bourbon-neat-example/issues",
-  "contributors": "will@mcmahan.me",
+  "author": "gscr",
+  "bugs": "https://github.com/gscr/gulp-bourbon-neat",
+  "contributors": "gscr",
   "dependencies": {
     "bourbon": "^5.0.0-beta.8",
     "bourbon-neat": "^2.1.0",
-    "gulp": "^3.9.1",
+    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-connect": "^5.0.0",
     "gulp-sass": "^3.1.0"
   },
-  "description": "An example project with Gulp using Bourbon and Neat",
-  "homepage": "https://robots.thoughtbot.com",
+  "description": "A better gulp set up with bourbon, neat, bitters and nunjucks",
+  "homepage": "https://github.com/gscr/gulp-bourbon-neat",
   "keywords": [
     "sass",
     "bourbon",
     "neat",
     "gulp",
-    "starter"
+    "nunjucks",
+    "bitters"
   ],
   "license": "ISC",
   "main": "gulfile.js",
-  "name": "gulp-bourbon-neat-example",
-  "repository": "https://github.com/thoughtbot/gulp-bourbon-neat-example",
-  "version": "1.0.0"
+  "name": "gulp-bourbon-neat",
+  "repository": "https://github.com/gscr/gulp-bourbon-neat",
+  "version": "1.0.0",
+  "devDependencies": {
+    "browser-sync": "^2.23.6",
+    "cssnano": "^3.10.0",
+    "del": "^3.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-nunjucks-render": "^2.2.2",
+    "gulp-postcss": "^7.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "jshint": "^2.9.5",
+    "postcss-cssnext": "^3.1.0"
+  }
 }
