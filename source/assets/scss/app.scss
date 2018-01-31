@@ -1,0 +1,9 @@
+@import "bourbon";
+@import "neat";
+@import "base/base";
+
+body{
+	@include grid-container;
+	@include grid-column;
+	background-color: whitesmoke;
+}
