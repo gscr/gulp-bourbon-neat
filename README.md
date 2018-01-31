@@ -25,9 +25,8 @@
    ```
 
 1. Run the default `gulp` command which will complie the stylesheets, with
-   Bourbon and Neat inclded as well as creating a local server at
-   [`http://localhost:8000`](http://localhost:8000). Gulp will continue to watch
-   the `/stylesheets` to monitor for any changes.
+   Bourbon and Neat inclded as well as creating a local server. Gulp will continue to watch
+   the `/source` folder to monitor for any changes.
 
    ```
    gulp
