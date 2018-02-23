@@ -10,6 +10,7 @@ var cssnext = require('postcss-cssnext');
 var del = require("del");
 var imagemin = require('gulp-imagemin');
 var jshint = require('gulp-jshint');
+var plumber = require('gulp-plumber');
 var postcss = require('gulp-postcss');
 var sass = require("gulp-sass");
 var sourcemaps = require('gulp-sourcemaps');
@@ -24,20 +25,28 @@ var paths = {
     templates: ['source/templates']
 };
 
+function onError(err) {
+    console.log('Name:', err.name);
+    console.log('Reason:', err.reason);
+    console.log('File:', err.file);
+    console.log('Line:', err.line);
+    console.log('Column:', err.column);
+}
+
 gulp.task('styles', function() {
     return gulp.src(paths.scss+'/*.scss')
-        .pipe(sass({ includePaths: [bourbon, neat], outputStyle: 'compact' }))
-        .pipe(concat('styles.css'))
-        .pipe(postcss([
-            cssnext()
-        ]))
+        .pipe(plumber({
+            errorHandler: onError
+        }))
+        .pipe(sourcemaps.init())
+        .pipe(sass({ includePaths: [bourbon, neat], outputStyle: 'compact'}))
+        .pipe(sourcemaps.write('maps'))
         .pipe(gulp.dest(paths.dist+'/css'));
 });
 
 gulp.task('build_styles', function() {
     return gulp.src(paths.scss+'/*.scss')
         .pipe(sass({ includePaths: [bourbon, neat]}))
-        .pipe(concat('styles.css'))
         .pipe(postcss([
             cssnext(),
             cssnano({ autoprefixer: false })
@@ -64,6 +73,9 @@ gulp.task('images', function() {
 
 gulp.task('nunjucks', function() {
     return gulp.src(paths.pages+'/**/*.html')
+        .pipe(plumber({
+            errorHandler: onError
+        }))
         .pipe(nunjucksRender({
             path: paths.templates
         }))
