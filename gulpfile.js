@@ -18,93 +18,90 @@ var uglify = require('gulp-uglify');
 
 var paths = {
 	dist: ['dist'],
-    scss: ['source/assets/scss'],
-    js: ['source/assets/js'],
-    img: ['source/assets/img'],
-    pages: ['source/pages'],
-    templates: ['source/templates']
+	scss: ['source/assets/scss'],
+	js: ['source/assets/js'],
+	img: ['source/assets/img'],
+	pages: ['source/pages'],
+	templates: ['source/templates']
 };
 
 function onError(err) {
-    console.log('Name:', err.name);
-    console.log('Reason:', err.reason);
-    console.log('File:', err.file);
-    console.log('Line:', err.line);
-    console.log('Column:', err.column);
+	console.log('Name:', err.name);
+	console.log('Reason:', err.reason);
+	console.log('File:', err.file);
+	console.log('Line:', err.line);
+	console.log('Column:', err.column);
 }
 
 gulp.task('styles', function() {
-    return gulp.src(paths.scss+'/*.scss')
-        .pipe(plumber({
-            errorHandler: onError
-        }))
-        .pipe(sourcemaps.init())
-        .pipe(sass({ includePaths: [bourbon, neat], outputStyle: 'compact'}))
-        .pipe(sourcemaps.write('maps'))
-        .pipe(gulp.dest(paths.dist+'/css'));
+	return gulp.src(paths.scss+'/*.scss')
+	.pipe(plumber({
+		errorHandler: onError
+	}))
+	.pipe(sourcemaps.init())
+	.pipe(sass({ includePaths: [bourbon, neat], outputStyle: 'compact'}))
+	.pipe(sourcemaps.write('maps'))
+	.pipe(gulp.dest(paths.dist+'/css'));
 });
 
 gulp.task('build_styles', function() {
-    return gulp.src(paths.scss+'/*.scss')
-        .pipe(sass({ includePaths: [bourbon, neat]}))
-        .pipe(postcss([
-            cssnext(),
-            cssnano({ autoprefixer: false })
-        ]))
-        .pipe(gulp.dest(paths.dist+'/css'));
+	return gulp.src(paths.scss+'/*.scss')
+	.pipe(sass({ includePaths: [bourbon, neat]}))
+	.pipe(postcss([
+		cssnext(),
+		cssnano({ autoprefixer: false })
+		]))
+	.pipe(gulp.dest(paths.dist+'/css'));
 });
 
 gulp.task('scripts', function() {
-    return gulp.src(paths.js+'/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'))
-        .pipe(concat('all.js'))
-        .pipe(uglify())
-        .pipe(sourcemaps.write('maps'))
-        .pipe(gulp.dest(paths.dist));
+	return gulp.src(paths.js+'/*.js')
+	.pipe(sourcemaps.init())
+	.pipe(jshint())
+	.pipe(jshint.reporter('default'))
+	.pipe(concat('all.js'))
+	.pipe(uglify())
+	.pipe(sourcemaps.write('maps'))
+	.pipe(gulp.dest(paths.dist));
 });
 
 gulp.task('images', function() {
-    return gulp.src(paths.img+'/*')
-        .pipe(imagemin())
-        .pipe(gulp.dest(paths.dist+'/img'))
+	return gulp.src(paths.img+'/*')
+	.pipe(imagemin())
+	.pipe(gulp.dest(paths.dist+'/img'))
 });
 
 gulp.task('nunjucks', function() {
-    return gulp.src(paths.pages+'/**/*.html')
-        .pipe(plumber({
-            errorHandler: onError
-        }))
-        .pipe(nunjucksRender({
-            path: paths.templates
-        }))
-        .pipe(gulp.dest(paths.dist))
+	return gulp.src(paths.pages+'/**/*.html')
+	.pipe(nunjucksRender({
+		path: paths.templates
+	}))
+	.pipe(gulp.dest(paths.dist))
 });
 
 gulp.task('browsersync', function() {
-    return browsersync({
-        server: {
-            baseDir: paths.dist
-        }
-    });
+	return browsersync({
+		server: {
+			baseDir: paths.dist
+		}
+	});
 });
 
 gulp.task('clean', function() {
-    return del([paths.dist+'/*']);
+	return del([paths.dist+'/*']);
 });
 
 // workaround for browsersync hanging when reloading after scss updates
 function reloadBrowserSync(cb) {
-    browsersync.reload();
-    cb();
+	browsersync.reload();
+	cb();
 }
 
 gulp.task('watch', function() {
-    gulp.watch(paths.pages+'/**/*.html', gulp.series('nunjucks', reloadBrowserSync));
-    gulp.watch(paths.scss+'/**/*.scss', gulp.series('styles', reloadBrowserSync));
-    gulp.watch(paths.js+'/*.js', gulp.series('scripts', reloadBrowserSync));
-    gulp.watch(paths.img+'/*', gulp.series('images', reloadBrowserSync));
+	gulp.watch(paths.pages+'/**/*.html', gulp.series('nunjucks', reloadBrowserSync));
+	gulp.watch(paths.scss+'/**/*.scss', gulp.series('styles', reloadBrowserSync));
+	gulp.watch(paths.js+'/*.js', gulp.series('scripts', reloadBrowserSync));
+	gulp.watch(paths.img+'/*', gulp.series('images', reloadBrowserSync));
 });
 
 gulp.task("default", gulp.parallel("styles", "images", "nunjucks", "browsersync", "watch"));
